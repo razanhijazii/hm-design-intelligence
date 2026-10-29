@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+# The model is rebuilt from data/ at deploy time (and on first start),
+# so it always matches the installed scikit-learn version.
+models/*.joblib
+.DS_Store

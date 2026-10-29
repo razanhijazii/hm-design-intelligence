@@ -1,0 +1,292 @@
+{
+  "_note": "Curated building blocks the brief engine combines: base pieces (a simple, sleek starting point), signature details (the one small detail that makes a piece special), materials and colourways. The engine decides which combinations to recommend from trend, brand and sales evidence; it never copies a past product.",
+
+  "colours": {
+    "cherry-red": "cherry red",
+    "chocolate-brown": "chocolate brown",
+    "powder-blue": "powder blue",
+    "black": "black",
+    "ecru": "ecru",
+    "mid-blue": "mid-blue wash"
+  },
+
+  "materials": {
+    "cotton-jersey":          {"label": "cotton jersey",              "fabric": "cotton-jersey", "sustainable": false, "costUplift": 0},
+    "organic-cotton-jersey":  {"label": "organic cotton jersey",      "fabric": "cotton-jersey", "sustainable": true,  "costUplift": 2, "note": "Organic cotton, grown without synthetic pesticides or fertilisers."},
+    "lyocell-jersey":         {"label": "lyocell jersey",             "fabric": "lyocell",       "sustainable": true,  "costUplift": 3, "note": "Lyocell from certified wood pulp, made in a closed-loop process that recovers its solvent."},
+    "crinkle-jersey":         {"label": "crinkle jersey",             "fabric": "crinkle",       "sustainable": false, "costUplift": 0},
+    "crinkle-poplin":         {"label": "crinkled cotton poplin",     "fabric": "crinkle",       "sustainable": false, "costUplift": 1},
+    "organic-crinkle-cotton": {"label": "organic crinkled cotton",    "fabric": "crinkle",       "sustainable": true,  "costUplift": 3, "note": "Organic cotton with a permanent crinkle finish, so it needs no ironing."},
+    "organic-cotton-poplin":  {"label": "organic cotton poplin",      "fabric": "poplin",        "sustainable": true,  "costUplift": 2, "note": "Organic cotton, grown without synthetic pesticides or fertilisers."},
+    "satin-viscose":          {"label": "satin-finish viscose",       "fabric": "satin",         "sustainable": false, "costUplift": 1},
+    "recycled-satin":         {"label": "recycled polyester satin",   "fabric": "satin",         "sustainable": true,  "costUplift": 2, "note": "Satin woven from recycled polyester made from post-consumer plastic bottles."},
+    "sheer-mesh":             {"label": "soft sheer mesh",            "fabric": "sheer",         "sustainable": false, "costUplift": 0},
+    "recycled-sheer-mesh":    {"label": "recycled sheer mesh",        "fabric": "sheer",         "sustainable": true,  "costUplift": 2, "note": "Mesh knitted from recycled polyamide."},
+    "sheer-voile":            {"label": "cotton voile",               "fabric": "sheer",         "sustainable": false, "costUplift": 1},
+    "rib-knit":               {"label": "stretch rib knit",           "fabric": "rib-knit",      "sustainable": false, "costUplift": 0},
+    "organic-rib-knit":       {"label": "organic cotton rib knit",    "fabric": "rib-knit",      "sustainable": true,  "costUplift": 2, "note": "Organic cotton rib with a small share of elastane for recovery."},
+    "rigid-denim":            {"label": "rigid cotton denim",         "fabric": "denim",         "sustainable": false, "costUplift": 0},
+    "recycled-denim":         {"label": "denim with recycled cotton", "fabric": "denim",         "sustainable": true,  "costUplift": 3, "note": "Blends cotton recycled from post-consumer denim with new fibre."},
+    "organic-cotton-denim":   {"label": "organic cotton denim",       "fabric": "denim",         "sustainable": true,  "costUplift": 2, "note": "Organic cotton denim finished with a low-water wash."}
+  },
+
+  "bases": [
+    {
+      "id": "dress-multiway-wrap", "garmentType": "dress", "name": "Multiway jersey midi dress", "style": "classy",
+      "silhouette": "wrap", "complexity": 2,
+      "description": "A fitted-bodice midi dress in {material} with two long, wide straps that wrap and tie, so one dress can be styled several ways.",
+      "materials": ["cotton-jersey", "lyocell-jersey", "organic-cotton-jersey"],
+      "colours": ["black", "cherry-red", "chocolate-brown", "powder-blue"],
+      "targetCustomer": "Event-to-everyday dresser, 20–35, who wants one dress for weddings, dinners and holidays",
+      "conversions": [
+        {"from": "Halter neck", "to": "Cross-back", "steps": ["Bring both straps over the shoulders from the front.", "Cross them at the back.", "Wrap them once around the waist and tie at the front."]},
+        {"from": "Cross-back", "to": "One-shoulder", "steps": ["Take one strap diagonally over the opposite shoulder.", "Wrap the second strap around the waist as a belt.", "Tie both ends together at the side seam."]},
+        {"from": "One-shoulder", "to": "Strapless with tie waist", "steps": ["Wrap both straps around the bust, crossing them at the back.", "Bring them round to the front.", "Knot them at the waist."]}
+      ]
+    },
+    {
+      "id": "dress-shirt-split", "garmentType": "dress", "name": "Two-piece shirt dress", "style": "casual",
+      "silhouette": "drop-waist", "complexity": 2,
+      "description": "A relaxed shirt dress in {material} with a low drop-waist seam that hides a row of buttons, so the bodice and skirt come apart.",
+      "materials": ["organic-cotton-poplin", "crinkle-poplin", "organic-crinkle-cotton"],
+      "colours": ["ecru", "powder-blue", "chocolate-brown", "cherry-red"],
+      "targetCustomer": "Student or young professional, 18–30, building a capsule wardrobe on a budget",
+      "conversions": [
+        {"from": "Shirt dress", "to": "Cropped shirt and midi skirt", "steps": ["Undo the hidden button placket along the drop-waist seam.", "Wear the bodice as a cropped shirt, open or knotted.", "Wear the skirt on its own; it has its own finished waistband."]},
+        {"from": "Shirt dress", "to": "Open duster layer", "steps": ["Unbutton the front placket fully.", "Wear it open over jeans or a slip dress as a light layer."]}
+      ]
+    },
+    {
+      "id": "dress-slip", "garmentType": "dress", "name": "Bias-cut slip dress", "style": "classy",
+      "silhouette": "bias-cut", "complexity": 1,
+      "description": "A bias-cut midi slip dress in {material} with fine adjustable straps and a straight neckline that skims the body.",
+      "materials": ["satin-viscose", "recycled-satin"],
+      "colours": ["black", "chocolate-brown", "cherry-red", "powder-blue", "ecru"],
+      "targetCustomer": "Going-out dresser, 20–35, who layers it by day and dresses it up at night"
+    },
+    {
+      "id": "dress-drop-waist-jersey", "garmentType": "dress", "name": "Drop-waist jersey midi dress", "style": "casual",
+      "silhouette": "drop-waist", "complexity": 1,
+      "description": "A soft midi dress in {material} with a long fitted bodice, a low drop waist and a gently flared skirt.",
+      "materials": ["cotton-jersey", "organic-cotton-jersey", "lyocell-jersey"],
+      "colours": ["black", "chocolate-brown", "powder-blue", "cherry-red"],
+      "targetCustomer": "Everyday comfort dresser, 22–40, who wants a dress that works with trainers"
+    },
+    {
+      "id": "dress-sheer-layer", "garmentType": "dress", "name": "Layered column dress", "style": "creative",
+      "silhouette": "column", "complexity": 2,
+      "description": "A column midi dress with a removable {material} overlay worn over a matching opaque slip.",
+      "materials": ["sheer-mesh", "recycled-sheer-mesh"],
+      "colours": ["black", "chocolate-brown", "powder-blue", "ecru"],
+      "targetCustomer": "Trend-led dresser, 18–28, who likes statement layering",
+      "conversions": [
+        {"from": "Layered column dress", "to": "Slip dress", "steps": ["Undo the two snaps hidden at the shoulders.", "Lift the sheer overlay off over the head."]},
+        {"from": "Sheer overlay", "to": "Sheer tunic over jeans", "steps": ["Wear the overlay on its own over jeans and a fitted tank.", "Tie the side ribbons loosely to shape the waist."]}
+      ]
+    },
+
+    {
+      "id": "top-scarf-blouse", "garmentType": "top", "name": "Scarf-collar blouse", "style": "classy",
+      "silhouette": "relaxed", "complexity": 1, "extraAttributes": ["detail:scarf-tie"],
+      "description": "A relaxed blouse in {material} with long scarf ends at the collar that tie, knot or hang loose.",
+      "materials": ["crinkle-poplin", "organic-crinkle-cotton", "organic-cotton-poplin", "satin-viscose"],
+      "colours": ["ecru", "powder-blue", "cherry-red", "chocolate-brown", "black"],
+      "targetCustomer": "Workwear-to-weekend dresser, 22–40, who wants polished pieces that aren't stiff",
+      "conversions": [
+        {"from": "Bow-neck blouse", "to": "Open-collar shirt", "steps": ["Untie the bow.", "Tuck the scarf ends inside the collar for a clean V-neck."]},
+        {"from": "Bow-neck blouse", "to": "Back-tie top", "steps": ["Wear the blouse back to front, so the button placket becomes a low back.", "Tie the scarf ends at the nape of the neck."]}
+      ]
+    },
+    {
+      "id": "top-two-way-knit", "garmentType": "top", "name": "Two-way rib top", "style": "casual",
+      "silhouette": "fitted", "complexity": 1,
+      "description": "A fitted top in {material}, cut to be worn with a V-neck at the front or turned around for a scoop neck with a V-back.",
+      "materials": ["rib-knit", "organic-rib-knit"],
+      "colours": ["black", "ecru", "cherry-red", "powder-blue", "chocolate-brown"],
+      "targetCustomer": "Casual everyday dresser, 18–30, who buys basics with a twist",
+      "conversions": [
+        {"from": "V-neck", "to": "Scoop neck with V-back", "steps": ["Take the top off and turn it around.", "Wear the scoop side at the front so the V sits at the back."]}
+      ]
+    },
+    {
+      "id": "top-sheer-shirt", "garmentType": "top", "name": "Sheer button-up shirt", "style": "creative",
+      "silhouette": "relaxed", "complexity": 1,
+      "description": "An oversized button-up shirt in {material}, made to layer over a bandeau, a slip dress or a fitted tank.",
+      "materials": ["sheer-voile", "recycled-sheer-mesh"],
+      "colours": ["ecru", "black", "powder-blue", "chocolate-brown"],
+      "targetCustomer": "Festival and city dresser, 18–28, who likes layering"
+    },
+    {
+      "id": "top-on-off", "garmentType": "top", "name": "On/off-shoulder top", "style": "casual",
+      "silhouette": "relaxed", "complexity": 1,
+      "description": "A loose top in {material} with an elasticated neckline and a drawcord hem.",
+      "materials": ["crinkle-poplin", "organic-crinkle-cotton"],
+      "colours": ["ecru", "cherry-red", "powder-blue", "black"],
+      "targetCustomer": "Holiday and summer dresser, 18–30",
+      "conversions": [
+        {"from": "On-shoulder top", "to": "Off-shoulder top", "steps": ["Pull the elasticated neckline down over both shoulders.", "Spread the gathers evenly across the front."]},
+        {"from": "Loose top", "to": "Cropped blouson top", "steps": ["Pull the hem drawcord to gather the top into a cropped shape.", "Tie the drawcord in a bow at the front."]}
+      ]
+    },
+
+    {
+      "id": "jeans-barrel", "garmentType": "jeans", "name": "Barrel-leg jeans", "style": "casual",
+      "silhouette": "barrel-leg", "complexity": 1,
+      "description": "Mid-rise barrel-leg jeans in {material} with a rounded leg that tapers to a cropped hem.",
+      "materials": ["rigid-denim", "recycled-denim"],
+      "colours": ["mid-blue", "black", "chocolate-brown", "ecru"],
+      "targetCustomer": "Denim-first casual dresser, 18–30, who follows new fits"
+    },
+    {
+      "id": "jeans-zip-off", "garmentType": "jeans", "name": "Zip-off wide-leg jeans", "style": "casual",
+      "silhouette": "wide-leg", "complexity": 2,
+      "description": "Wide-leg jeans in {material} with a zip concealed in a seam above the knee, so the lower legs come off and the jeans become long shorts.",
+      "materials": ["rigid-denim", "recycled-denim", "organic-cotton-denim"],
+      "colours": ["mid-blue", "ecru", "black"],
+      "targetCustomer": "Student or traveller, 18–30, packing light for changing weather",
+      "conversions": [
+        {"from": "Full-length wide-leg jeans", "to": "Bermuda shorts", "steps": ["Open the zip hidden in the seam above each knee.", "Remove both lower legs; the zip tape is finished to sit flat as a hem."]},
+        {"from": "Bermuda shorts", "to": "Full-length jeans", "steps": ["Line up each lower leg using the matching seam markers.", "Close both zips; the seam reads as a design line."]}
+      ]
+    },
+    {
+      "id": "jeans-to-skirt", "garmentType": "jeans", "name": "Jeans-to-skirt convertible", "style": "creative",
+      "silhouette": "straight-leg", "complexity": 2,
+      "description": "Straight-leg jeans in {material} with zips along both inner leg seams and a hidden denim panel, so the jeans open into a midi skirt.",
+      "materials": ["rigid-denim", "recycled-denim"],
+      "colours": ["mid-blue", "black", "ecru"],
+      "targetCustomer": "Statement-casual dresser, 18–28, who likes pieces with a story",
+      "conversions": [
+        {"from": "Straight-leg jeans", "to": "Denim midi skirt", "steps": ["Unzip both inner leg seams from hem to crotch.", "Unfold the panel tucked inside the back seam.", "Snap it across the front opening to close the skirt."]},
+        {"from": "Denim midi skirt", "to": "Front-split skirt", "steps": ["Unsnap the front panel and tuck it back inside.", "Wear the skirt with an open front split."]}
+      ]
+    },
+    {
+      "id": "jeans-straight", "garmentType": "jeans", "name": "High-rise straight-leg jeans", "style": "classy",
+      "silhouette": "straight-leg", "complexity": 1,
+      "description": "High-rise straight-leg jeans in {material} with a clean front, a long inseam and a pressed centre crease.",
+      "materials": ["rigid-denim", "recycled-denim", "organic-cotton-denim"],
+      "colours": ["mid-blue", "black", "ecru", "chocolate-brown"],
+      "targetCustomer": "Smart-casual dresser, 22–40, who wears jeans to work"
+    },
+
+    {
+      "id": "skirt-tube", "garmentType": "skirt", "name": "Convertible tube skirt", "style": "casual",
+      "silhouette": "tube", "complexity": 1,
+      "description": "A midi tube skirt in {material} with a deep, soft elastic waistband that stretches up over the bust.",
+      "materials": ["crinkle-jersey", "lyocell-jersey", "organic-cotton-jersey"],
+      "colours": ["black", "cherry-red", "powder-blue", "chocolate-brown"],
+      "targetCustomer": "Casual and holiday dresser, 18–30, who packs light",
+      "conversions": [
+        {"from": "Midi tube skirt", "to": "Strapless mini dress", "steps": ["Pull the waistband up so it sits over the bust.", "Smooth the skirt down; the midi length now falls as a mini dress."]},
+        {"from": "Midi tube skirt", "to": "Ruched mini skirt", "steps": ["Push the skirt up from the hem and gather it at the hips.", "The soft elastic holds the gathers in place."]}
+      ]
+    },
+    {
+      "id": "skirt-drop-waist-pleat", "garmentType": "skirt", "name": "Drop-waist pleated midi skirt", "style": "classy",
+      "silhouette": "drop-waist", "complexity": 1,
+      "description": "A midi skirt in {material} with a smooth hip yoke and soft pleats released from a low drop waist.",
+      "materials": ["satin-viscose", "recycled-satin", "organic-cotton-poplin"],
+      "colours": ["chocolate-brown", "black", "powder-blue", "ecru", "cherry-red"],
+      "targetCustomer": "Polished dresser, 22–40, building outfits for work and dinners"
+    },
+    {
+      "id": "skirt-wrap-multi", "garmentType": "skirt", "name": "Multiway wrap skirt", "style": "creative",
+      "silhouette": "wrap", "complexity": 2,
+      "description": "A long wrap skirt in {material} with extra-long waist ties, cut wide enough to wear as a halter dress.",
+      "materials": ["satin-viscose", "recycled-satin", "organic-crinkle-cotton"],
+      "colours": ["cherry-red", "powder-blue", "chocolate-brown", "black", "ecru"],
+      "targetCustomer": "Holiday and occasion dresser, 20–35, who wants one piece to pack",
+      "conversions": [
+        {"from": "Wrap midi skirt", "to": "Halter dress", "steps": ["Wrap the skirt around the body just under the arms.", "Cross the long ties at the front.", "Tie them behind the neck."]},
+        {"from": "Wrap midi skirt", "to": "Strapless dress", "steps": ["Wrap the waistband around the bust.", "Take the ties round the waist and knot them at the side."]}
+      ]
+    },
+    {
+      "id": "skirt-bubble", "garmentType": "skirt", "name": "Bubble-hem mini skirt", "style": "creative",
+      "silhouette": "bubble-hem", "complexity": 1,
+      "description": "A mini skirt in {material} with a gathered waist and a puffed bubble hem.",
+      "materials": ["satin-viscose", "recycled-satin", "crinkle-poplin"],
+      "colours": ["black", "chocolate-brown", "cherry-red", "powder-blue"],
+      "targetCustomer": "Going-out dresser, 18–25"
+    },
+    {
+      "id": "skirt-bias", "garmentType": "skirt", "name": "Bias-cut midi skirt", "style": "classy",
+      "silhouette": "bias-cut", "complexity": 1,
+      "description": "A bias-cut midi skirt in {material} with a slim elastic waist and a fluid hem.",
+      "materials": ["satin-viscose", "recycled-satin"],
+      "colours": ["chocolate-brown", "black", "powder-blue", "ecru", "cherry-red"],
+      "targetCustomer": "Day-to-night dresser, 20–40"
+    }
+  ],
+
+  "details": [
+    {
+      "id": "detail-back-lacing", "attribute": "detail:exposed-lacing", "name": "Exposed back lacing",
+      "excludeBases": ["dress-multiway-wrap", "skirt-wrap-multi", "skirt-tube", "top-two-way-knit"],
+      "placements": {
+        "dress": {"suffix": "with exposed back lacing", "text": "A short run of exposed ribbon lacing down the centre back, finished in a soft bow at the waist. It also lets the wearer adjust the fit."},
+        "top":   {"suffix": "with exposed back lacing", "text": "Exposed ribbon lacing at the centre back, from the shoulder blades to the waist, that pulls in for a closer fit."},
+        "skirt": {"suffix": "with a laced back waist", "text": "Exposed ribbon lacing at the centre-back waist that doubles as fit adjustment, finished with a small bow."},
+        "jeans": {"suffix": "with a laced back yoke", "text": "Exposed lacing across the back yoke in place of a belt, so the waist can be tightened by hand."}
+      }
+    },
+    {
+      "id": "detail-scarf-tie", "attribute": "detail:scarf-tie", "name": "Self-fabric scarf tie",
+      "excludeBases": ["top-scarf-blouse", "skirt-wrap-multi", "dress-multiway-wrap", "dress-shirt-split"],
+      "placements": {
+        "dress": {"suffix": "with a scarf-tie neckline", "text": "A narrow self-fabric scarf set into the neckline, long enough to tie as a bow, a knot or a loose drape."},
+        "top":   {"suffix": "with a scarf-tie neckline", "text": "A narrow self-fabric scarf set into the neckline, long enough to tie as a bow, a knot or a loose drape."},
+        "skirt": {"suffix": "with a scarf-tie sash", "text": "A narrow self-fabric scarf threaded through the waistband and tied off to one side as a sash."},
+        "jeans": {"suffix": "with a scarf-tie belt", "text": "A slim cotton scarf threaded through the belt loops in place of a belt, knotted at the hip."}
+      }
+    },
+    {
+      "id": "detail-bow-straps", "attribute": "detail:bow-strap", "name": "Bow-tied straps",
+      "allowedBases": ["dress-slip", "dress-drop-waist-jersey", "dress-sheer-layer"],
+      "placements": {
+        "dress": {"suffix": "with bow-tied straps", "text": "Shoulder straps that tie in small bows at the front, so the strap length and neckline height can be adjusted."}
+      }
+    },
+    {
+      "id": "detail-sheer-panel", "attribute": "detail:sheer-panel", "name": "Sheer inset panel",
+      "excludeBases": ["dress-sheer-layer", "top-sheer-shirt", "skirt-tube"],
+      "placements": {
+        "dress": {"suffix": "with a sheer back panel", "text": "A single sheer inset across the upper back in tonal mesh, keeping the front clean."},
+        "top":   {"suffix": "with sheer sleeves", "text": "Sheer sleeves in tonal mesh on an otherwise opaque body."},
+        "skirt": {"suffix": "with a sheer hem band", "text": "A deep band of tonal mesh at the hem, so the skirt reads midi but feels light."}
+      }
+    },
+    {
+      "id": "detail-statement-button", "attribute": "detail:statement-button", "name": "Single sculpted button",
+      "excludeBases": ["top-two-way-knit", "skirt-tube", "top-on-off"],
+      "placements": {
+        "dress": {"suffix": "with a sculpted button", "text": "One oversized sculpted button at the neckline, the only fastening on show."},
+        "top":   {"suffix": "with a sculpted button", "text": "One oversized sculpted button at the neckline, the only fastening on show."},
+        "skirt": {"suffix": "with a sculpted side button", "text": "One oversized sculpted button at the side waist, fastening an overlapped panel."},
+        "jeans": {"suffix": "with a sculpted waist button", "text": "A single oversized sculpted shank button at the waist in brushed metal."}
+      }
+    },
+    {
+      "id": "detail-contrast-stitch", "attribute": "detail:contrast-stitch", "name": "Tonal contrast topstitching",
+      "placements": {
+        "jeans": {"suffix": "with tonal topstitching", "text": "Heavy topstitching a few shades lighter than the base, tracing every seam to show off the cut."}
+      }
+    },
+    {
+      "id": "detail-curved-seam", "attribute": "detail:curved-seam", "name": "Curved front seams",
+      "placements": {
+        "jeans": {"suffix": "with curved front seams", "text": "Two seams that curve from hip to knee, shaping the leg without stretch."}
+      }
+    },
+    {
+      "id": "detail-ruching", "attribute": "detail:ruching", "name": "Adjustable side ruching",
+      "excludeBases": ["skirt-tube", "dress-multiway-wrap", "skirt-wrap-multi", "skirt-drop-waist-pleat"],
+      "placements": {
+        "dress": {"suffix": "with adjustable side ruching", "text": "A drawcord inside one side seam that ruches the fabric, so the hem can be raised or lowered."},
+        "top":   {"suffix": "with adjustable side ruching", "text": "A drawcord inside one side seam that ruches the body into a cropped, asymmetric line."},
+        "skirt": {"suffix": "with adjustable side ruching", "text": "A drawcord inside one side seam that ruches the fabric, so the hem can be raised or lowered."}
+      }
+    }
+  ]
+}

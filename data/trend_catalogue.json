@@ -1,0 +1,24 @@
+{
+  "_note": "Trends tracked by the engine. Each maps to one or more design attributes used in the design library and the product history.",
+  "trends": [
+    {"id": "trend-cherry-red", "name": "Cherry red", "category": "colour", "attributes": ["colour:cherry-red"]},
+    {"id": "trend-chocolate-brown", "name": "Chocolate brown", "category": "colour", "attributes": ["colour:chocolate-brown"]},
+    {"id": "trend-powder-blue", "name": "Powder blue", "category": "colour", "attributes": ["colour:powder-blue"]},
+    {"id": "trend-drop-waist", "name": "Drop-waist silhouette", "category": "silhouette", "attributes": ["silhouette:drop-waist"]},
+    {"id": "trend-barrel-leg", "name": "Barrel-leg shape", "category": "silhouette", "attributes": ["silhouette:barrel-leg"]},
+    {"id": "trend-bubble-hem", "name": "Bubble hem", "category": "silhouette", "attributes": ["silhouette:bubble-hem"]},
+    {"id": "trend-exposed-lacing", "name": "Exposed lacing", "category": "detail", "attributes": ["detail:exposed-lacing"]},
+    {"id": "trend-scarf-ties", "name": "Scarf ties and bows", "category": "detail", "attributes": ["detail:scarf-tie", "detail:bow-strap"]},
+    {"id": "trend-sheer-layers", "name": "Sheer layering", "category": "fabric", "attributes": ["fabric:sheer", "detail:sheer-panel"]},
+    {"id": "trend-crinkle-texture", "name": "Crinkle texture", "category": "fabric", "attributes": ["fabric:crinkle"]}
+  ],
+  "_evergreenNote": "Attributes not tied to a tracked trend get a stable baseline interest index (0-100) instead of a time series.",
+  "evergreen": {
+    "colour:black": 60, "colour:ecru": 52, "colour:mid-blue": 62,
+    "silhouette:bias-cut": 55, "silhouette:wrap": 48, "silhouette:column": 44, "silhouette:a-line": 50,
+    "silhouette:relaxed": 52, "silhouette:fitted": 54, "silhouette:cropped": 46,
+    "silhouette:straight-leg": 58, "silhouette:wide-leg": 56, "silhouette:skinny": 34, "silhouette:tube": 47,
+    "detail:none": 50, "detail:statement-button": 46, "detail:contrast-stitch": 44, "detail:curved-seam": 48, "detail:ruching": 47,
+    "fabric:cotton-jersey": 54, "fabric:satin": 52, "fabric:poplin": 50, "fabric:lyocell": 48, "fabric:rib-knit": 53, "fabric:denim": 58
+  }
+}

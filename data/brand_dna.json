@@ -1,0 +1,25 @@
+{
+  "_note": "Assumed brand profile for this concept project, paraphrased from H&M's public positioning (trend-led fashion and quality at accessible prices, with a stated sustainability commitment). Not supplied by or affiliated with H&M.",
+  "brand": "H&M",
+  "positioning": "Trend-led fashion at accessible prices, with versatile pieces and a sustainability commitment.",
+  "styleMix": {"casual": 0.45, "classy": 0.35, "creative": 0.20},
+  "priceBands": {
+    "dress": [25, 45],
+    "top": [15, 30],
+    "jeans": [30, 45],
+    "skirt": [20, 35]
+  },
+  "maxComplexity": 2,
+  "sustainabilityWeight": 0.35,
+  "coreValues": [
+    "clean, wearable silhouettes",
+    "one trend-forward detail rather than many",
+    "pieces that work across occasions",
+    "accessible price points"
+  ],
+  "avoid": [
+    "costume-like or runway-only construction",
+    "more than one statement detail per piece",
+    "price points above the band for the category"
+  ]
+}

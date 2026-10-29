@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: hm-design-intelligence
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python scripts/train_demand_model.py
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: CORS_ORIGINS
+        value: "*"
