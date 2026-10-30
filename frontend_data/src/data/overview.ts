@@ -4,7 +4,7 @@ import type { Overview } from "./types";
 export const overview: Overview = {
   "risingTrends": 6,
   "activeBriefs": 12,
-  "totalRecommendedUnits": 118100,
+  "totalRecommendedUnits": 114700,
   "averageConfidence": 81,
   "topBriefIds": [
     "skirt-drop-waist-pleat--sheer-panel--cherry-red",

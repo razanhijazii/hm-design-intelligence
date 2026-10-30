@@ -4,8 +4,11 @@ A RandomForestRegressor is trained on the past-product history. To forecast a
 new brief, the linked trends are projected forward over the design-to-store lead
 time, the model predicts week-by-week demand for several candidate launch weeks,
 and the launch week with the highest total demand is recommended (later weeks
-are discounted slightly, since the trend read gets older). Safety stock
-(15%, as in the Hermès model) is added on top of the forecast.
+are discounted slightly, since the trend read gets older).
+
+The forecast keeps every tree's weekly path and the model's measured weekly
+error, so app/services/inventory.py can simulate the demand distribution and
+set the order quantity with a newsvendor model.
 """
 
 from __future__ import annotations
@@ -30,6 +33,7 @@ logger = logging.getLogger(__name__)
 
 GARMENTS = ["dress", "top", "jeans", "skirt"]
 STYLES = ["casual", "classy", "creative"]
+BUNDLE_VERSION = 2
 FEATURES = (
     [f"garment_{g}" for g in GARMENTS]
     + [f"style_{s}" for s in STYLES]
@@ -53,8 +57,8 @@ class DemandForecast:
     weeks: list[date]
     units: list[int]
     total_units: int
-    recommended_units: int
     cv: float  # forecast spread across trees, as a fraction of the total
+    tree_paths: np.ndarray  # (n_trees, n_weeks) weekly demand from each tree
 
 
 def _season(week_start: date) -> tuple[float, float]:
@@ -112,8 +116,12 @@ def train() -> dict:
 
     holdout = RandomForestRegressor(**params).fit(X[train_mask], y[train_mask])
     pred = holdout.predict(X[~train_mask])
+    # Weekly error on unseen launches, in log terms: the noise the inventory
+    # simulation adds on top of the model's own uncertainty.
+    log_resid = np.log(np.maximum(y[~train_mask], 1) / np.maximum(pred, 1))
     metrics = {
         "holdout_r2": round(float(r2_score(y[~train_mask], pred)), 3),
+        "weekly_residual_sigma": round(float(log_resid.std()), 3),
         "holdout_mape": round(float(mean_absolute_percentage_error(y[~train_mask], pred)), 3),
         "train_rows": int(train_mask.sum()),
         "holdout_rows": int((~train_mask).sum()),
@@ -125,6 +133,7 @@ def train() -> dict:
         "metrics": metrics,
         "sklearn_version": sklearn.__version__,
         "algorithm": "RandomForestRegressor",
+        "bundle_version": BUNDLE_VERSION,
     }
     config.MODEL_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, config.MODEL_PATH)
@@ -138,7 +147,11 @@ def load_model() -> dict:
     if config.MODEL_PATH.exists():
         try:
             bundle = joblib.load(config.MODEL_PATH)
-            if bundle.get("features") == FEATURES and bundle.get("sklearn_version") == sklearn.__version__:
+            if (
+                bundle.get("features") == FEATURES
+                and bundle.get("sklearn_version") == sklearn.__version__
+                and bundle.get("bundle_version") == BUNDLE_VERSION
+            ):
                 return bundle
             logger.info("Model artifact is stale; retraining")
         except Exception:  # noqa: BLE001 - any unreadable artifact is retrained
@@ -212,9 +225,13 @@ def forecast(profile: DemandProfile) -> DemandForecast:
         weeks=[launch + timedelta(weeks=h) for h in range(config.FORECAST_WEEKS)],
         units=units,
         total_units=int(sum(units)),
-        recommended_units=int(50 * round(sum(units) * (1 + config.SAFETY_STOCK) / 50)),
         cv=cv,
+        tree_paths=per_tree,
     )
+
+
+def residual_sigma() -> float:
+    return float(load_model()["metrics"]["weekly_residual_sigma"])
 
 
 def model_info() -> dict:
@@ -223,7 +240,7 @@ def model_info() -> dict:
         "algorithm": bundle["algorithm"],
         "features": bundle["features"],
         "metrics": bundle["metrics"],
-        "safetyStock": config.SAFETY_STOCK,
+        "orderQuantity": "newsvendor on simulated demand (see app/services/inventory.py)",
         "sklearnVersion": bundle["sklearn_version"],
     }
 

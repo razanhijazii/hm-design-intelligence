@@ -69,6 +69,26 @@ class SizeShare(ApiModel):
     percent: int
 
 
+class DemandRange(ApiModel):
+    """Simulated season demand: 10th, 50th and 90th percentile."""
+    p10: int
+    p50: int
+    p90: int
+
+
+class Newsvendor(ApiModel):
+    """How the order quantity was set (all money values per unit, in $)."""
+    critical_ratio: float          # Cu / (Cu + Co): the demand percentile ordered to
+    underage_cost: float           # margin lost per missed sale
+    overage_cost: float            # loss per unsold unit after markdown
+    markdown_basis: str            # what set the markdown value: evergreen / rising / peaking / fading
+    stockout_probability: float    # share of simulated seasons that sell out
+    expected_sell_through: float   # expected share of the order sold at full price
+    expected_leftover_units: int
+    expected_profit: float
+    simulations: int
+
+
 class Forecast(ApiModel):
     brief_id: str
     weekly_demand: list[WeeklyDemand]
@@ -77,6 +97,8 @@ class Forecast(ApiModel):
     launch_window: str
     stock_risk: StockRisk
     risk_reason: str
+    demand_range: Optional[DemandRange] = None
+    newsvendor: Optional[Newsvendor] = None
 
 
 class Overview(ApiModel):

@@ -70,7 +70,7 @@ export const forecasts: Forecast[] = [
         "units": 380
       }
     ],
-    "recommendedUnits": 10300,
+    "recommendedUnits": 9750,
     "sizeSplit": [
       {
         "size": "XS",
@@ -95,7 +95,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 22 Mar 2027; selling window to July 2027",
     "stockRisk": "medium",
-    "riskReason": "Sheer layering is at a plateau, so demand could soften during the selling window. Keep a re-order option open rather than buying the full quantity up front (forecast range ±10%)."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 6,300 to 11,830 units (80% range). Ordering 9,750 covers demand in 69% of them, with about 1,410 units expected left for markdown. Sheer layering is at a plateau and leftover stock would clear at a deeper markdown, which pulls the order below the upper end of demand. Keep a re-order option open.",
+    "demandRange": {
+      "p10": 6300,
+      "p50": 8620,
+      "p90": 11830
+    },
+    "newsvendor": {
+      "criticalRatio": 0.69,
+      "underageCost": 16.8,
+      "overageCost": 7.56,
+      "markdownBasis": "peaking",
+      "stockoutProbability": 0.311,
+      "expectedSellThrough": 0.856,
+      "expectedLeftoverUnits": 1410,
+      "expectedProfit": 129552.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "dress-drop-waist-jersey--bow-straps--chocolate-brown",
@@ -165,7 +181,7 @@ export const forecasts: Forecast[] = [
         "units": 345
       }
     ],
-    "recommendedUnits": 9150,
+    "recommendedUnits": 8750,
     "sizeSplit": [
       {
         "size": "XS",
@@ -190,7 +206,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 18 Jan 2027; selling window to May 2027",
     "stockRisk": "medium",
-    "riskReason": "Chocolate brown is at a plateau, so demand could soften during the selling window. Keep a re-order option open rather than buying the full quantity up front (forecast range ±11%)."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 5,580 to 10,700 units (80% range). Ordering 8,750 covers demand in 69% of them, with about 1,290 units expected left for markdown. Chocolate brown is at a plateau and leftover stock would clear at a deeper markdown, which pulls the order below the upper end of demand. Keep a re-order option open.",
+    "demandRange": {
+      "p10": 5580,
+      "p50": 7700,
+      "p90": 10700
+    },
+    "newsvendor": {
+      "criticalRatio": 0.69,
+      "underageCost": 21.6,
+      "overageCost": 9.72,
+      "markdownBasis": "peaking",
+      "stockoutProbability": 0.307,
+      "expectedSellThrough": 0.853,
+      "expectedLeftoverUnits": 1290,
+      "expectedProfit": 148714.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "skirt-tube--scarf-tie--cherry-red",
@@ -260,7 +292,7 @@ export const forecasts: Forecast[] = [
         "units": 440
       }
     ],
-    "recommendedUnits": 11750,
+    "recommendedUnits": 11500,
     "sizeSplit": [
       {
         "size": "XS",
@@ -285,7 +317,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 22 Mar 2027; selling window to July 2027",
     "stockRisk": "low",
-    "riskReason": "Linked trends are still building into launch and the forecast range is narrow (±11%), so committing to the recommended quantity is reasonable."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 7,500 to 13,210 units (80% range). Ordering 11,500 covers demand in 75% of them, with about 1,760 units expected left for markdown. The linked trends are still building into launch, so the downside is mainly forecast error.",
+    "demandRange": {
+      "p10": 7500,
+      "p50": 9910,
+      "p90": 13210
+    },
+    "newsvendor": {
+      "criticalRatio": 0.75,
+      "underageCost": 15.6,
+      "overageCost": 5.2,
+      "markdownBasis": "rising",
+      "stockoutProbability": 0.251,
+      "expectedSellThrough": 0.847,
+      "expectedLeftoverUnits": 1760,
+      "expectedProfit": 142766.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "jeans-barrel--scarf-tie--chocolate-brown",
@@ -355,7 +403,7 @@ export const forecasts: Forecast[] = [
         "units": 340
       }
     ],
-    "recommendedUnits": 9500,
+    "recommendedUnits": 9000,
     "sizeSplit": [
       {
         "size": "XS",
@@ -380,7 +428,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 18 Jan 2027; selling window to May 2027",
     "stockRisk": "medium",
-    "riskReason": "Barrel-leg shape is at a plateau, so demand could soften during the selling window. Keep a re-order option open rather than buying the full quantity up front (forecast range ±10%)."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 5,860 to 10,980 units (80% range). Ordering 9,000 covers demand in 69% of them, with about 1,280 units expected left for markdown. Barrel-leg shape is at a plateau and leftover stock would clear at a deeper markdown, which pulls the order below the upper end of demand. Keep a re-order option open.",
+    "demandRange": {
+      "p10": 5860,
+      "p50": 7980,
+      "p90": 10980
+    },
+    "newsvendor": {
+      "criticalRatio": 0.69,
+      "underageCost": 23.4,
+      "overageCost": 10.53,
+      "markdownBasis": "peaking",
+      "stockoutProbability": 0.312,
+      "expectedSellThrough": 0.858,
+      "expectedLeftoverUnits": 1280,
+      "expectedProfit": 167284.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "top-on-off--back-lacing--cherry-red",
@@ -450,7 +514,7 @@ export const forecasts: Forecast[] = [
         "units": 445
       }
     ],
-    "recommendedUnits": 10900,
+    "recommendedUnits": 10700,
     "sizeSplit": [
       {
         "size": "XS",
@@ -475,7 +539,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 18 Jan 2027; selling window to May 2027",
     "stockRisk": "low",
-    "riskReason": "Linked trends are still building into launch and the forecast range is narrow (±11%), so committing to the recommended quantity is reasonable."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 7,000 to 12,270 units (80% range). Ordering 10,700 covers demand in 75% of them, with about 1,630 units expected left for markdown. The linked trends are still building into launch, so the downside is mainly forecast error.",
+    "demandRange": {
+      "p10": 7000,
+      "p50": 9230,
+      "p90": 12270
+    },
+    "newsvendor": {
+      "criticalRatio": 0.75,
+      "underageCost": 14.4,
+      "overageCost": 4.8,
+      "markdownBasis": "rising",
+      "stockoutProbability": 0.25,
+      "expectedSellThrough": 0.848,
+      "expectedLeftoverUnits": 1630,
+      "expectedProfit": 122856.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "top-scarf-blouse--sheer-panel--chocolate-brown",
@@ -545,7 +625,7 @@ export const forecasts: Forecast[] = [
         "units": 470
       }
     ],
-    "recommendedUnits": 11850,
+    "recommendedUnits": 11350,
     "sizeSplit": [
       {
         "size": "XS",
@@ -570,7 +650,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 15 Feb 2027; selling window to May 2027",
     "stockRisk": "medium",
-    "riskReason": "Chocolate brown is at a plateau, so demand could soften during the selling window. Keep a re-order option open rather than buying the full quantity up front (forecast range ±9%)."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 7,380 to 13,710 units (80% range). Ordering 11,350 covers demand in 69% of them, with about 1,620 units expected left for markdown. Chocolate brown is at a plateau and leftover stock would clear at a deeper markdown, which pulls the order below the upper end of demand. Keep a re-order option open.",
+    "demandRange": {
+      "p10": 7380,
+      "p50": 10050,
+      "p90": 13710
+    },
+    "newsvendor": {
+      "criticalRatio": 0.69,
+      "underageCost": 13.2,
+      "overageCost": 5.94,
+      "markdownBasis": "peaking",
+      "stockoutProbability": 0.314,
+      "expectedSellThrough": 0.857,
+      "expectedLeftoverUnits": 1620,
+      "expectedProfit": 118847.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "dress-sheer-layer--bow-straps--powder-blue",
@@ -640,7 +736,7 @@ export const forecasts: Forecast[] = [
         "units": 315
       }
     ],
-    "recommendedUnits": 8800,
+    "recommendedUnits": 8350,
     "sizeSplit": [
       {
         "size": "XS",
@@ -665,7 +761,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 18 Jan 2027; selling window to May 2027",
     "stockRisk": "medium",
-    "riskReason": "Sheer layering is at a plateau, so demand could soften during the selling window. Keep a re-order option open rather than buying the full quantity up front (forecast range ±10%)."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 5,370 to 10,210 units (80% range). Ordering 8,350 covers demand in 69% of them, with about 1,210 units expected left for markdown. Sheer layering is at a plateau and leftover stock would clear at a deeper markdown, which pulls the order below the upper end of demand. Keep a re-order option open.",
+    "demandRange": {
+      "p10": 5370,
+      "p50": 7400,
+      "p90": 10210
+    },
+    "newsvendor": {
+      "criticalRatio": 0.69,
+      "underageCost": 22.8,
+      "overageCost": 10.26,
+      "markdownBasis": "peaking",
+      "stockoutProbability": 0.311,
+      "expectedSellThrough": 0.855,
+      "expectedLeftoverUnits": 1210,
+      "expectedProfit": 150484.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "dress-shirt-split--ruching--powder-blue",
@@ -735,7 +847,7 @@ export const forecasts: Forecast[] = [
         "units": 360
       }
     ],
-    "recommendedUnits": 9150,
+    "recommendedUnits": 8950,
     "sizeSplit": [
       {
         "size": "XS",
@@ -760,7 +872,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 18 Jan 2027; selling window to May 2027",
     "stockRisk": "low",
-    "riskReason": "Linked trends are still building into launch and the forecast range is narrow (±10%), so committing to the recommended quantity is reasonable."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 5,930 to 10,140 units (80% range). Ordering 8,950 covers demand in 75% of them, with about 1,320 units expected left for markdown. The linked trends are still building into launch, so the downside is mainly forecast error.",
+    "demandRange": {
+      "p10": 5930,
+      "p50": 7780,
+      "p90": 10140
+    },
+    "newsvendor": {
+      "criticalRatio": 0.75,
+      "underageCost": 23.4,
+      "overageCost": 7.8,
+      "markdownBasis": "rising",
+      "stockoutProbability": 0.249,
+      "expectedSellThrough": 0.853,
+      "expectedLeftoverUnits": 1320,
+      "expectedProfit": 168391.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "top-sheer-shirt--back-lacing--ecru",
@@ -830,7 +958,7 @@ export const forecasts: Forecast[] = [
         "units": 455
       }
     ],
-    "recommendedUnits": 11100,
+    "recommendedUnits": 10650,
     "sizeSplit": [
       {
         "size": "XS",
@@ -855,7 +983,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 1 Mar 2027; selling window to June 2027",
     "stockRisk": "medium",
-    "riskReason": "Sheer layering is at a plateau, so demand could soften during the selling window. Keep a re-order option open rather than buying the full quantity up front (forecast range ±11%)."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 6,800 to 12,960 units (80% range). Ordering 10,650 covers demand in 69% of them, with about 1,550 units expected left for markdown. Sheer layering is at a plateau and leftover stock would clear at a deeper markdown, which pulls the order below the upper end of demand. Keep a re-order option open.",
+    "demandRange": {
+      "p10": 6800,
+      "p50": 9410,
+      "p90": 12960
+    },
+    "newsvendor": {
+      "criticalRatio": 0.69,
+      "underageCost": 13.8,
+      "overageCost": 6.21,
+      "markdownBasis": "peaking",
+      "stockoutProbability": 0.307,
+      "expectedSellThrough": 0.854,
+      "expectedLeftoverUnits": 1550,
+      "expectedProfit": 115880.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "jeans-zip-off--contrast-stitch--mid-blue",
@@ -925,7 +1069,7 @@ export const forecasts: Forecast[] = [
         "units": 290
       }
     ],
-    "recommendedUnits": 8850,
+    "recommendedUnits": 8900,
     "sizeSplit": [
       {
         "size": "XS",
@@ -949,8 +1093,24 @@ export const forecasts: Forecast[] = [
       }
     ],
     "launchWindow": "Launch w/c 18 Jan 2027; selling window to May 2027",
-    "stockRisk": "medium",
-    "riskReason": "No tracked trend drives this piece, so demand rests on evergreen attributes and past sales (forecast range ±10%). A steady seller rather than a spike."
+    "stockRisk": "low",
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 6,220 to 9,250 units (80% range). Ordering 8,900 covers demand in 86% of them, with about 1,340 units expected left for markdown. No tracked trend drives this piece, so leftover stock can carry over to next season. That is why the order sits higher in the demand range.",
+    "demandRange": {
+      "p10": 6220,
+      "p50": 7570,
+      "p90": 9250
+    },
+    "newsvendor": {
+      "criticalRatio": 0.857,
+      "underageCost": 24.6,
+      "overageCost": 4.1,
+      "markdownBasis": "evergreen",
+      "stockoutProbability": 0.146,
+      "expectedSellThrough": 0.85,
+      "expectedLeftoverUnits": 1340,
+      "expectedProfit": 180514.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "jeans-straight--statement-button--black",
@@ -1045,7 +1205,23 @@ export const forecasts: Forecast[] = [
     ],
     "launchWindow": "Launch w/c 18 Jan 2027; selling window to May 2027",
     "stockRisk": "low",
-    "riskReason": "No tracked trend drives this piece, so demand rests on evergreen attributes and past sales (forecast range ±9%). A steady seller rather than a spike."
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 6,200 to 8,950 units (80% range). Ordering 8,650 covers demand in 86% of them, with about 1,230 units expected left for markdown. No tracked trend drives this piece, so leftover stock can carry over to next season. That is why the order sits higher in the demand range.",
+    "demandRange": {
+      "p10": 6200,
+      "p50": 7450,
+      "p90": 8950
+    },
+    "newsvendor": {
+      "criticalRatio": 0.857,
+      "underageCost": 22.8,
+      "overageCost": 3.8,
+      "markdownBasis": "evergreen",
+      "stockoutProbability": 0.146,
+      "expectedSellThrough": 0.858,
+      "expectedLeftoverUnits": 1230,
+      "expectedProfit": 164453.0,
+      "simulations": 5000
+    }
   },
   {
     "briefId": "skirt-wrap-multi--statement-button--powder-blue",
@@ -1115,7 +1291,7 @@ export const forecasts: Forecast[] = [
         "units": 300
       }
     ],
-    "recommendedUnits": 8100,
+    "recommendedUnits": 8150,
     "sizeSplit": [
       {
         "size": "XS",
@@ -1139,7 +1315,23 @@ export const forecasts: Forecast[] = [
       }
     ],
     "launchWindow": "Launch w/c 15 Feb 2027; selling window to May 2027",
-    "stockRisk": "medium",
-    "riskReason": "Linked trends are still building into launch and the forecast range is narrow (±16%), so committing to the recommended quantity is reasonable."
+    "stockRisk": "low",
+    "riskReason": "Across 5,000 simulated seasons, demand ran from 4,980 to 9,360 units (80% range). Ordering 8,150 covers demand in 75% of them, with about 1,390 units expected left for markdown. The linked trends are still building into launch, so the downside is mainly forecast error.",
+    "demandRange": {
+      "p10": 4980,
+      "p50": 6920,
+      "p90": 9360
+    },
+    "newsvendor": {
+      "criticalRatio": 0.75,
+      "underageCost": 19.2,
+      "overageCost": 6.4,
+      "markdownBasis": "rising",
+      "stockoutProbability": 0.247,
+      "expectedSellThrough": 0.83,
+      "expectedLeftoverUnits": 1390,
+      "expectedProfit": 120935.0,
+      "simulations": 5000
+    }
   }
 ];

@@ -104,8 +104,11 @@ def test_forecast_contract(snap):
         assert len(f.weekly_demand) == config.FORECAST_WEEKS
         assert date.fromisoformat(f.weekly_demand[0].week) >= earliest_launch
         assert sum(s.percent for s in f.size_split) == 100
-        total = sum(w.units for w in f.weekly_demand)
-        assert abs(f.recommended_units - total * (1 + config.SAFETY_STOCK)) <= 25
+        assert f.demand_range.p10 < f.demand_range.p50 < f.demand_range.p90
+        # The newsvendor orders above the median (critical ratio > 0.5) but
+        # inside the simulated range.
+        assert f.demand_range.p50 < f.recommended_units < f.demand_range.p90
+        assert 0.5 < f.newsvendor.critical_ratio < 1
         assert f.stock_risk in {"low", "medium", "high"} and f.risk_reason
 
 

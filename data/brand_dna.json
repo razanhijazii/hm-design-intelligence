@@ -10,6 +10,14 @@
     "skirt": [20, 35]
   },
   "maxComplexity": 2,
+  "inventoryEconomics": {
+    "_note": "Assumed unit economics for the newsvendor model, as shares of the selling price. Markdown recovery is what an unsold unit is worth after the season: evergreen pieces can be carried over; pieces tied to a fading trend must be cleared deeply. Trend shock sigma is the season-wide uncertainty about where a trend actually lands.",
+    "unitCostShare": 0.40,
+    "handlingCostShare": 0.05,
+    "markdownRecoveryShare": {"evergreen": 0.35, "rising": 0.25, "peaking": 0.18, "fading": 0.10},
+    "trendShockSigma": {"evergreen": 0.10, "rising": 0.18, "peaking": 0.22, "fading": 0.30},
+    "simulations": 5000
+  },
   "sustainabilityWeight": 0.35,
   "coreValues": [
     "clean, wearable silhouettes",

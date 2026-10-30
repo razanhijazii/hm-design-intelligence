@@ -3,6 +3,7 @@
 trend signals -> trend summaries
 design library + trends + brand DNA + sales history -> scored candidates
 -> balanced selection of design briefs -> demand forecast per brief
+-> simulated demand distribution -> newsvendor order quantity
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ import numpy as np
 from app import config
 from app.schemas import DesignBrief, Forecast, Overview, Trend
 from app.services import briefs as brief_engine
-from app.services import demand, history, trends
+from app.services import demand, history, inventory, trends
 
 logger = logging.getLogger(__name__)
 
@@ -59,40 +60,41 @@ def build_trends() -> list[Trend]:
     return out
 
 
-def _risk(candidate: brief_engine.Candidate, fc: demand.DemandForecast) -> tuple[str, str]:
+def _risk(candidate: brief_engine.Candidate, nv: inventory.NewsvendorResult) -> tuple[str, str]:
+    """Stock risk from how wide simulated demand is and what the trends are doing,
+    with an explanation a buyer can act on."""
     lookup = {t.id: t for t in trends.summarise_trends()}
     linked = [lookup[t] for t in candidate.linked_trend_ids]
-    trend_risk = max((TREND_RISK[t.status] for t in linked), default=0.35)
-    spread = min(fc.cv / 0.3, 1.0)
-    score = 0.5 * trend_risk + 0.5 * spread
-    level = "low" if score < 0.33 else "medium" if score < 0.55 else "high"
-    band = f"±{round(fc.cv * 100)}%"
+    trend_risk = float(np.mean([TREND_RISK[t.status] for t in linked])) if linked else 0.35
+    spread = (nv.p90 - nv.p10) / max(nv.p50, 1)  # 80% range relative to the median
+    score = 0.5 * trend_risk + 0.5 * min(spread, 1.0)
+    level = "low" if score < 0.4 else "medium" if score < 0.6 else "high"
 
+    sim = (
+        f"Across {nv.simulations:,} simulated seasons, demand ran from {nv.p10:,} to {nv.p90:,} units "
+        f"(80% range). Ordering {nv.order_quantity:,} covers demand in {round(nv.critical_ratio * 100)}% of them, "
+        f"with about {nv.expected_leftover:,} units expected left for markdown."
+    )
     fading = [t for t in linked if t.status == "fading"]
     peaking = [t for t in linked if t.status == "peaking"]
     if fading:
-        t = fading[0]
-        reason = (
-            f"{t.name} is fading and projected at about {round(t.projected_index_at_launch)}/100 by launch, so "
-            "demand could drop faster than forecast. Start with a smaller first order and re-order on sell-through."
+        advice = (
+            f" {fading[0].name} is fading, so unsold stock would need deep markdowns: the order is set "
+            "conservatively. Re-order on early sell-through rather than buying more up front."
         )
-    elif peaking and level != "low":
-        t = peaking[0]
-        reason = (
-            f"{t.name} is at a plateau, so demand could soften during the selling window. Keep a re-order "
-            f"option open rather than buying the full quantity up front (forecast range {band})."
+    elif peaking:
+        advice = (
+            f" {peaking[0].name} is at a plateau and leftover stock would clear at a deeper markdown, which "
+            "pulls the order below the upper end of demand. Keep a re-order option open."
         )
     elif linked:
-        reason = (
-            f"Linked trends are still building into launch and the forecast range is narrow ({band}), "
-            "so committing to the recommended quantity is reasonable."
-        )
+        advice = " The linked trends are still building into launch, so the downside is mainly forecast error."
     else:
-        reason = (
-            f"No tracked trend drives this piece, so demand rests on evergreen attributes and past sales "
-            f"(forecast range {band}). A steady seller rather than a spike."
+        advice = (
+            " No tracked trend drives this piece, so leftover stock can carry over to next season. That is why "
+            "the order sits higher in the demand range."
         )
-    return level, reason
+    return level, sim + advice
 
 
 def _launch_window(fc: demand.DemandForecast) -> str:
@@ -107,19 +109,36 @@ def build() -> Snapshot:
     selected = brief_engine.select(candidates)
 
     brief_models, forecast_models = [], []
+    trend_lookup = {t.id: t for t in trends.summarise_trends()}
     for c in selected:
         fc = demand.forecast(brief_engine.profile_for(c))
         brief_models.append(DesignBrief.model_validate(brief_engine.write_brief(c, fc)))
-        level, reason = _risk(c, fc)
+        statuses = [trend_lookup[t].status for t in c.linked_trend_ids]
+        nv = inventory.newsvendor(
+            fc.tree_paths, c.price, inventory.worst_status(statuses), demand.residual_sigma(), seed_key=c.id
+        )
+        level, reason = _risk(c, nv)
         forecast_models.append(
             Forecast(
                 brief_id=c.id,
                 weekly_demand=[{"week": w.isoformat(), "units": u} for w, u in zip(fc.weeks, fc.units)],
-                recommended_units=fc.recommended_units,
+                recommended_units=nv.order_quantity,
                 size_split=[{"size": s, "percent": p} for s, p in history.size_split(c.garment)],
                 launch_window=_launch_window(fc),
                 stock_risk=level,
                 risk_reason=reason,
+                demand_range={"p10": nv.p10, "p50": nv.p50, "p90": nv.p90},
+                newsvendor={
+                    "critical_ratio": nv.critical_ratio,
+                    "underage_cost": nv.underage_cost,
+                    "overage_cost": nv.overage_cost,
+                    "markdown_basis": nv.markdown_basis,
+                    "stockout_probability": nv.stockout_probability,
+                    "expected_sell_through": nv.expected_sell_through,
+                    "expected_leftover_units": nv.expected_leftover,
+                    "expected_profit": nv.expected_profit,
+                    "simulations": nv.simulations,
+                },
             )
         )
 

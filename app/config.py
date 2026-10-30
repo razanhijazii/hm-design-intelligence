@@ -32,7 +32,6 @@ LAUNCH_SEARCH_WEEKS = int(os.getenv("LAUNCH_SEARCH_WEEKS", "14"))
 LATE_LAUNCH_DISCOUNT = float(os.getenv("LATE_LAUNCH_DISCOUNT", "0.015"))
 
 FORECAST_WEEKS = 16
-SAFETY_STOCK = 0.15  # same buffer as the Hermès demand model
 RANDOM_SEED = 42
 
 BRIEFS_PER_GARMENT = 3
