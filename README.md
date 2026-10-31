@@ -1,5 +1,7 @@
 # H&M Design & Demand Intelligence
 
+**Live demo:** [hm-design-intelligence-frontend.lovable.app](https://hm-design-intelligence-frontend.lovable.app) (dashboard, code in [the frontend repo](https://github.com/razanhijazii/screenshot-to-spark-2441))
+
 **Live API:** [hm-design-intelligence.onrender.com/docs](https://hm-design-intelligence.onrender.com/docs) (interactive; free hosting, so the first request can take up to a minute while the server wakes up)
 
 A decision tool for fashion design and merchandising teams. Instead of generating garment images, it tells designers **what to design, why, and how much to make**:
