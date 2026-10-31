@@ -114,6 +114,17 @@ python -m pytest -q
 
 The history is generated from the same trend index the engine reads, with realistic effects: price sensitivity, seasonality, product lifecycle, a multiway uplift and noise. The model has to recover those effects; its holdout score on the most recent 20% of launches is reported at `/meta`. Unit volumes represent a modelled test market, not H&M's real scale.
 
+**Does the model beat simple baselines?** On the same holdout (`python scripts/compare_baselines.py`):
+
+| Model | R² | MAPE |
+|---|---|---|
+| Overall average | -0.21 | 28% |
+| Average by garment and week | 0.09 | 23% |
+| Linear regression | 0.41 | 23% |
+| Random forest (used) | 0.49 | 17% |
+
+The forest is the best of the four, and its error is lowest where it matters for ordering. An R² near 0.5 is modest by design: the synthetic history includes random noise, so the order quantity comes from the simulated range of outcomes, not a single forecast.
+
 **To use real data,** replace the CSVs with real exports using the same columns, for example search interest from the Google Trends BigQuery adapter in the Hermès backend and sales from a retailer dataset, then rerun. Nothing else changes.
 
 ## Project layout
