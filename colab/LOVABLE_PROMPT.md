@@ -2,7 +2,7 @@ Build a two-part web app called "Style Vote" for my fashion design-intelligence 
 
 There is NO database in this app and NO login system. Do not add Supabase. All data comes from one Google Apps Script web app that sits on my Google Sheet. Put its URL in one constant, src/config.ts:
 
-  export const API_URL = "PASTE_MY_APPS_SCRIPT_WEB_APP_URL_HERE";
+  export const API_URL = "https://script.google.com/macros/s/AKfycbwNUtlRzDdpAP2Gxtu7iMBg4nNbe742ij40DgQtpNXG3zrbgXfk9uM5Tw6GrLx8UNmr/exec";
 
 ## The API (already built — match it exactly)
 
