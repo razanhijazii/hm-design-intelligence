@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Style Vote</title>
+<meta name="description" content="Rate new designs and trends. Your votes help decide what gets made.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+  :root {
+    --paper: #f6f3ee; --card: #fffdf9; --ink: #161514; --muted: #6f6a63; --line: #e4ded4;
+    --accent: #161514; --accent-ink: #fffdf9; --soft: #efe9df; --good: #2f6b4f; --warn: #9b3b2a;
+    --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #141312; --card: #1d1b19; --ink: #f3efe8; --muted: #a59e94; --line: #34302b;
+      --accent: #f3efe8; --accent-ink: #141312; --soft: #26231f; --good: #7fc4a0; --warn: #e28c79;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); }
+  body { font: 16px/1.5 Inter, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 460px; margin: 0 auto; padding: 18px 16px 40px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  .brand { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; }
+  .step { font-size: 13px; color: var(--muted); }
+  .bar { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--ink); transition: width .35s ease; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .visual { position: relative; aspect-ratio: 4 / 4.4; background: var(--soft); display: grid; place-items: center; }
+  .visual img { width: 100%; height: 100%; object-fit: cover; }
+  .visual svg { width: 68%; height: 82%; filter: drop-shadow(0 10px 18px rgba(0,0,0,.12)); }
+  .tags { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; font-weight: 600; letter-spacing: .02em; padding: 4px 9px; border-radius: 99px;
+         background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+  .body { padding: 18px 18px 20px; }
+  h1 { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .price { font-weight: 600; margin-bottom: 8px; }
+  .desc { color: var(--muted); font-size: 14.5px; margin: 0 0 4px; }
+  .q { margin-top: 20px; }
+  .q > label, .qt { display: block; font-weight: 600; font-size: 15px; margin-bottom: 10px; }
+  .qt small { font-weight: 400; color: var(--muted); }
+  .stars { display: flex; gap: 6px; }
+  .stars button { flex: 1; min-height: 52px; border-radius: 12px; border: 1px solid var(--line); background: var(--card);
+                  color: var(--ink); font: 600 18px/1 Inter, sans-serif; cursor: pointer; transition: all .15s; }
+  .stars button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sw { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 68px; background: none; border: 0;
+        color: var(--ink); cursor: pointer; padding: 0; font: 12px/1.25 Inter, sans-serif; text-align: center; }
+  .sw span.dot { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(0,0,0,.12);
+                 box-shadow: inset 0 0 0 3px var(--card); outline: 2px solid transparent; outline-offset: 2px; transition: outline-color .15s; }
+  .sw[aria-pressed="true"] span.dot { outline-color: var(--ink); }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .seg button, .chips button { min-height: 46px; border-radius: 12px; border: 1px solid var(--line); background: var(--card);
+                               color: var(--ink); font: 500 15px Inter, sans-serif; cursor: pointer; }
+  .seg button[aria-pressed="true"], .chips button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  details { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chips button { min-height: 38px; padding: 0 14px; font-size: 14px; }
+  .primary { width: 100%; min-height: 54px; margin-top: 22px; border: 0; border-radius: 14px; background: var(--accent);
+             color: var(--accent-ink); font: 600 16px Inter, sans-serif; cursor: pointer; transition: opacity .15s; }
+  .primary:disabled { opacity: .35; cursor: not-allowed; }
+  .ghost { width: 100%; min-height: 46px; margin-top: 10px; border: 1px solid var(--line); border-radius: 14px;
+           background: transparent; color: var(--ink); font: 500 15px Inter, sans-serif; cursor: pointer; }
+  .poll { padding: 26px 20px 22px; text-align: center; }
+  .poll h1 { font-size: 26px; margin-bottom: 6px; }
+  .poll p { color: var(--muted); margin: 0 0 22px; font-size: 14.5px; }
+  .hotnot { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hotnot button { min-height: 64px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink);
+                   font: 600 17px Inter, sans-serif; cursor: pointer; }
+  .hotnot button:active { transform: scale(.98); }
+  .center { text-align: center; padding: 40px 22px; }
+  .center h1 { font-size: 28px; margin-bottom: 10px; }
+  .center p { color: var(--muted); }
+  .notice { font-size: 13px; padding: 10px 12px; border-radius: 12px; background: var(--soft); color: var(--muted); margin-bottom: 14px; }
+  .err { color: var(--warn); font-size: 14px; margin-top: 10px; min-height: 1em; }
+  footer { margin-top: 26px; font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
+  .fade { animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Style Vote</div>
+    <div class="step" id="step"></div>
+  </header>
+  <div class="bar"><i id="progress"></i></div>
+  <div id="notice"></div>
+  <main id="app"><div class="center"><p>Loading designs…</p></div></main>
+  <footer>Your votes are anonymous and help decide which designs get made, in which colours.<br>
+    Independent concept project · not affiliated with or endorsed by H&amp;M.</footer>
+</div>
+
+<script>
+(function () {
+  const API = (window.STYLE_VOTE_CONFIG && window.STYLE_VOTE_CONFIG.API_URL || "").trim();
+  const PREVIEW = !API;
+  const params = new URLSearchParams(location.search);
+  const startId = params.get("d");
+  const source = (params.get("src") || "instagram").slice(0, 30);
+  const app = document.getElementById("app");
+
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage unavailable */ } },
+  };
+  let voterId = store.get("sv_voter");
+  if (!voterId) {
+    voterId = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)).replace(/[^A-Za-z0-9-]/g, "").slice(0, 36);
+    store.set("sv_voter", voterId);
+  }
+  let ageRange = store.get("sv_age") || "";
+
+  const SAMPLE = {
+    designs: [
+      { design_id: "PREVIEW1", garment: "skirt", name: "A-line maxi skirt with a statement button line",
+        description: "A viscose crêpe skirt in Princess Blue. Convertible: the elasticated waistband pulls up over the bust to wear it as a strapless dress.",
+        colours: "Princess Blue, Cloud Dancer, Chili Pepper, Daiquiri Green", colour_hex: "#00539C, #F0EEE9, #9B1B30, #D8E39A",
+        price_eur: 29.99, multiway: "Skirt-to-dress", sustainable: "no", image_url: "" },
+      { design_id: "PREVIEW2", garment: "dress", name: "Wrap midi dress with a side slit",
+        description: "An organic cotton jersey dress in Hibiscus.", colours: "Hibiscus, Cloud Dancer, Lavender Oil, Blue Indigo",
+        colour_hex: "#DD3848, #F0EEE9, #C2A6CF, #49516D", price_eur: 34.99, multiway: "", sustainable: "yes", image_url: "" },
+      { design_id: "PREVIEW3", garment: "jeans", name: "Wide-leg jeans with pressed front pleats",
+        description: "A recycled cotton denim pair of jeans in Mid-wash denim.", colours: "Mid-wash denim, Light-wash denim, Black, Cloud Dancer",
+        colour_hex: "#5A7DA3, #A7BFD8, #1C1C1C, #F0EEE9", price_eur: 39.99, multiway: "", sustainable: "yes", image_url: "" },
+    ],
+    trend_polls: [
+      { trend_id: "T-barrel-jeans", question: "Barrel jeans: hot or not?" },
+      { trend_id: "T-slip-dress", question: "Slip dress: hot or not?" },
+      { trend_id: "T-corset-top", question: "Corset top: hot or not?" },
+    ],
+  };
+
+  let designs = [], polls = [], queue = [], pos = 0;
+
+  function el(tag, attrs, children) {
+    const n = document.createElement(tag);
+    Object.entries(attrs || {}).forEach(([k, v]) => {
+      if (k === "class") n.className = v;
+      else if (k === "html") n.innerHTML = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v);
+    });
+    (children || []).forEach(c => n.append(c));
+    return n;
+  }
+
+  function shade(hex, amt) {
+    const h = hex.replace("#", "");
+    const n = parseInt(h.length === 3 ? h.split("").map(c => c + c).join("") : h, 16);
+    const c = [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.max(0, Math.min(255, Math.round(v * amt))));
+    return "#" + c.map(v => v.toString(16).padStart(2, "0")).join("");
+  }
+
+  function garmentSVG(garment, name, hex) {
+    const nm = (name || "").toLowerCase();
+    const fill = hex, line = shade(hex, 0.72), seam = shade(hex, 0.85);
+    let body = "";
+    if (garment === "dress") {
+      const hem = nm.includes("mini") ? 175 : nm.includes("maxi") ? 255 : 220;
+      const flare = nm.includes("fitted") || nm.includes("slip") ? 18 : 42;
+      body = `<path d="M78 22 L84 22 L88 58 L112 58 L116 22 L122 22 L126 70 Q132 88 126 104 L${142 + flare} ${hem}
+              Q100 ${hem + 12} ${58 - flare} ${hem} L74 104 Q68 88 74 70 Z" fill="${fill}" stroke="${line}" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M74 104 Q100 112 126 104" fill="none" stroke="${seam}" stroke-width="2"/>`;
+    } else if (garment === "top") {
+      const hem = nm.includes("cropped") ? 130 : 168;
+      const wide = nm.includes("oversized") ? 14 : 0;
+      body = `<path d="M70 40 Q100 56 130 40 L${168 + wide} 70 L${154 + wide} 98 L${138 + wide} 88 L${138 + wide} ${hem}
+              Q100 ${hem + 8} ${62 - wide} ${hem} L${62 - wide} 88 L${46 - wide} 98 L${32 - wide} 70 Z" fill="${fill}" stroke="${line}"
+              stroke-width="2.2" stroke-linejoin="round"/><path d="M84 46 Q100 64 116 46" fill="none" stroke="${seam}" stroke-width="2"/>`;
+    } else if (garment === "jeans") {
+      const legOut = nm.includes("wide") || nm.includes("flare") ? 30 : nm.includes("barrel") ? 22 : nm.includes("slim") ? -4 : 10;
+      const knee = nm.includes("barrel") ? 30 : 0;
+      body = `<path d="M62 24 L138 24 L${146 + knee} 120 L${148 + legOut} 252 L${106} 252 L100 98 L94 252 L${52 - legOut} 252
+              L${54 - knee} 120 Z" fill="${fill}" stroke="${line}" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M62 38 L138 38" stroke="${seam}" stroke-width="2"/><path d="M100 38 L100 72" stroke="${seam}" stroke-width="2"/>`;
+    } else {
+      const hem = nm.includes("mini") ? 120 : nm.includes("maxi") ? 245 : 190;
+      const flare = nm.includes("fitted") || nm.includes("slip") ? 16 : 40;
+      body = `<path d="M70 40 L130 40 L${136 + flare} ${hem} Q100 ${hem + 12} ${64 - flare} ${hem} Z" fill="${fill}" stroke="${line}"
+              stroke-width="2.2" stroke-linejoin="round"/><path d="M70 54 L130 54" stroke="${seam}" stroke-width="2"/>`;
+    }
+    return `<svg viewBox="0 0 200 270" role="img" aria-label="${name}">${body}</svg>`;
+  }
+
+  function progress() {
+    const total = queue.length;
+    document.getElementById("progress").style.width = total ? (100 * pos / total) + "%" : "0";
+    document.getElementById("step").textContent = pos < total ? `${pos + 1} of ${total}` : "";
+  }
+
+  async function send(vote) {
+    if (PREVIEW) return { ok: true };
+    const res = await fetch(API, { method: "POST", body: JSON.stringify(Object.assign({ voter_id: voterId, source, age_range: ageRange }, vote)) });
+    return res.json();
+  }
+
+  function next() { pos += 1; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+
+  function renderDesign(d) {
+    const names = String(d.colours || "").split(",").map(s => s.trim()).filter(Boolean);
+    const hexes = String(d.colour_hex || "").split(",").map(s => s.trim());
+    const state = { rating: 0, colour: "", price: "" };
+    const photos = String(d.image_urls || "").split(",").map(s => s.trim());
+    const visual = el("div", { class: "visual" });
+    let img = null;
+    const drawGarment = (i) => {
+      const src = photos[i] || (i === 0 ? d.image_url : "") || "";
+      if (src) {
+        visual.querySelector("svg")?.remove();
+        if (!img) { img = el("img", { alt: d.name + " (concept render)" }); visual.prepend(img); }
+        img.src = src;
+        return;
+      }
+      if (img) { img.remove(); img = null; }
+      visual.querySelector("svg")?.remove();
+      visual.insertAdjacentHTML("beforeend", garmentSVG(d.garment, d.name, hexes[i] || "#999999"));
+    };
+    const tags = el("div", { class: "tags" });
+    if (photos.some(Boolean)) tags.append(el("span", { class: "tag" }, ["Concept render"]));
+    if (d.multiway) tags.append(el("span", { class: "tag" }, ["Convertible"]));
+    if (String(d.sustainable).toLowerCase() === "yes") tags.append(el("span", { class: "tag" }, ["Sustainable material"]));
+    visual.append(tags);
+    drawGarment(0);
+
+    const submit = el("button", { class: "primary", disabled: "" }, ["Send my vote"]);
+    const err = el("div", { class: "err", role: "status" });
+    const check = () => { submit.disabled = !state.rating; };
+
+    const labels = ["Not for me", "", "Maybe", "", "Need it"];
+    const stars = el("div", { class: "stars", role: "group", "aria-label": "Rating from 1 to 5" });
+    for (let i = 1; i <= 5; i++) {
+      const b = el("button", { type: "button", "aria-pressed": "false", "aria-label": `${i} of 5${labels[i - 1] ? " — " + labels[i - 1] : ""}`,
+        onclick: () => { state.rating = i; stars.querySelectorAll("button").forEach((x, j) => x.setAttribute("aria-pressed", String(j < i))); check(); } }, [String(i)]);
+      stars.append(b);
+    }
+    const sw = el("div", { class: "swatches", role: "group", "aria-label": "Colour options" });
+    names.forEach((n, i) => {
+      const b = el("button", { type: "button", class: "sw", "aria-pressed": "false",
+        onclick: () => { state.colour = n; sw.querySelectorAll(".sw").forEach(x => x.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", "true"); drawGarment(i); } },
+        [el("span", { class: "dot", style: `background:${hexes[i] || "#ccc"}` }), document.createTextNode(n)]);
+      sw.append(b);
+    });
+    const seg = el("div", { class: "seg", role: "group", "aria-label": "Would you buy it at this price" });
+    [["yes", "Yes"], ["maybe", "Maybe"], ["no", "No"]].forEach(([v, t]) => {
+      seg.append(el("button", { type: "button", "aria-pressed": "false",
+        onclick: (e) => { state.price = v; seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", "false")); e.currentTarget.setAttribute("aria-pressed", "true"); } }, [t]));
+    });
+    const chips = el("div", { class: "chips" });
+    ["16-24", "25-34", "35-44", "45-54", "55+"].forEach(a => {
+      chips.append(el("button", { type: "button", "aria-pressed": String(ageRange === a),
+        onclick: (e) => { ageRange = ageRange === a ? "" : a; store.set("sv_age", ageRange);
+          chips.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x.textContent === ageRange))); } }, [a]));
+    });
+
+    submit.addEventListener("click", async () => {
+      submit.disabled = true; submit.textContent = "Sending…"; err.textContent = "";
+      try {
+        const r = await send({ type: "design", item_id: d.design_id, rating: state.rating, colour: state.colour, price_answer: state.price });
+        if (!r.ok) throw new Error(r.error || "Could not save");
+        next();
+      } catch (e) {
+        err.textContent = "Couldn't send that — check your connection and try again. (" + e.message + ")";
+        submit.disabled = false; submit.textContent = "Send my vote";
+      }
+    });
+
+    const price = Number(d.price_eur);
+    return el("article", { class: "card fade" }, [
+      visual,
+      el("div", { class: "body" }, [
+        el("h1", {}, [d.name]),
+        el("div", { class: "price" }, [isFinite(price) ? `€${price.toFixed(2)}` : ""]),
+        el("p", { class: "desc" }, [d.description || ""]),
+        el("div", { class: "q" }, [el("span", { class: "qt" }, ["How much would you wear it?"]), stars,
+          el("div", { class: "scale" }, [el("span", {}, ["Not for me"]), el("span", {}, ["Need it"])])]),
+        names.length ? el("div", { class: "q" }, [el("span", { class: "qt", html: "Which colour would you pick? <small>(tap to preview)</small>" }), sw]) : "",
+        el("div", { class: "q" }, [el("span", { class: "qt" }, [`Would you buy it at €${isFinite(price) ? price.toFixed(2) : "this price"}?`]), seg]),
+        el("details", ageRange ? {} : {}, [el("summary", {}, ["Add your age range (optional)"]), chips]),
+        submit, err,
+        el("button", { class: "ghost", type: "button", onclick: next }, ["Skip this one"]),
+      ]),
+    ]);
+  }
+
+  function renderPoll(p) {
+    const err = el("div", { class: "err", role: "status" });
+    const vote = async (answer, btns) => {
+      btns.forEach(b => b.disabled = true);
+      try {
+        const r = await send({ type: "trend", item_id: p.trend_id, answer });
+        if (!r.ok) throw new Error(r.error || "Could not save");
+        next();
+      } catch (e) { err.textContent = "Couldn't send that — try again."; btns.forEach(b => b.disabled = false); }
+    };
+    const hot = el("button", { type: "button" }, ["🔥 Hot"]);
+    const not = el("button", { type: "button" }, ["Not for me"]);
+    hot.onclick = () => vote("hot", [hot, not]);
+    not.onclick = () => vote("not", [hot, not]);
+    const q = String(p.question || "").replace(/: hot or not\?$/i, "");
+    return el("article", { class: "card poll fade" }, [
+      el("div", { class: "step" }, ["Quick trend check"]),
+      el("h1", {}, [q]), el("p", {}, ["In or out for next season?"]),
+      el("div", { class: "hotnot" }, [hot, not]), err,
+      el("button", { class: "ghost", type: "button", onclick: next }, ["Skip"]),
+    ]);
+  }
+
+  function renderEnd() {
+    return el("div", { class: "card center fade" }, [
+      el("h1", {}, ["Thank you"]),
+      el("p", {}, ["Your votes go straight to the design team's dashboard and help decide what gets made, and in which colours."]),
+      el("button", { class: "ghost", type: "button", onclick: () => { pos = 0; render(); } }, ["Vote again from the start"]),
+    ]);
+  }
+
+  function render() {
+    progress();
+    app.innerHTML = "";
+    if (pos >= queue.length) { app.append(renderEnd()); return; }
+    const item = queue[pos];
+    app.append(item.kind === "design" ? renderDesign(item.data) : renderPoll(item.data));
+  }
+
+  async function load() {
+    if (PREVIEW) {
+      document.getElementById("notice").innerHTML = '<div class="notice">Preview mode — add your Apps Script URL to config.js to load live designs. Votes here are not saved.</div>';
+      return SAMPLE;
+    }
+    const res = await fetch(API + (API.includes("?") ? "&" : "?") + "action=public");
+    return res.json();
+  }
+
+  load().then(data => {
+    designs = data.designs || [];
+    polls = (data.trend_polls || []).slice().sort(() => Math.random() - 0.5).slice(0, 6);
+    if (startId) {
+      const i = designs.findIndex(d => d.design_id === startId);
+      if (i > 0) designs.unshift(designs.splice(i, 1)[0]);
+    }
+    queue = designs.map(d => ({ kind: "design", data: d })).concat(polls.map(p => ({ kind: "poll", data: p })));
+    if (!queue.length) { app.innerHTML = '<div class="card center"><h1>Nothing to vote on yet</h1><p>New designs are coming soon.</p></div>'; return; }
+    render();
+  }).catch(() => {
+    app.innerHTML = '<div class="card center"><h1>Can\'t load designs</h1><p>Please check your connection and refresh.</p></div>';
+  });
+})();
+</script>
+</body>
+</html>

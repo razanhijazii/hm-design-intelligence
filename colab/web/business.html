@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Intelligence — Business</title>
+<script src="config.js"></script>
+<style>
+  :root { --bg: #ffffff; --fg: #1b1b1b; --muted: #666; --line: #ddd; --head: #f4f4f4; --hi: #eef5ff; --good: #1d7a46; --bad: #b3261e; --mid: #a86b00; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #161616; --fg: #eaeaea; --muted: #9a9a9a; --line: #333; --head: #202020; --hi: #1e2a3a; --good: #6cc792; --bad: #ef8a80; --mid: #e0b05c; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 14px 16px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+  header h1 { font-size: 16px; margin: 0; }
+  header .meta { color: var(--muted); font-size: 13px; }
+  header .sp { flex: 1; }
+  button, input { font: inherit; }
+  .btn { border: 1px solid var(--line); background: var(--bg); color: var(--fg); padding: 5px 11px; border-radius: 6px; cursor: pointer; }
+  .btn:hover { background: var(--head); }
+  nav { display: flex; gap: 2px; padding: 0 12px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  nav button { border: 0; background: none; color: var(--muted); padding: 10px 10px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+  nav button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--fg); font-weight: 600; }
+  main { padding: 16px; }
+  .note { color: var(--muted); margin: 0 0 12px; max-width: 900px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .kpi { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  .kpi b { display: block; font-size: 22px; }
+  .kpi span { color: var(--muted); font-size: 12.5px; }
+  .tablebar { display: flex; gap: 8px; align-items: center; margin: 4px 0 8px; flex-wrap: wrap; }
+  .tablebar input { border: 1px solid var(--line); background: var(--bg); color: var(--fg); padding: 5px 8px; border-radius: 6px; min-width: 200px; }
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { padding: 6px 9px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { background: var(--head); position: sticky; top: 0; cursor: pointer; white-space: nowrap; font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.wide { min-width: 210px; }
+  tr:hover td { background: var(--hi); }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.2); vertical-align: -2px; margin-right: 5px; }
+  .risk-low { color: var(--good); font-weight: 600; } .risk-medium { color: var(--mid); font-weight: 600; } .risk-high { color: var(--bad); font-weight: 600; }
+  .st-rising { color: var(--good); } .st-peaking { color: var(--mid); } .st-fading { color: var(--bad); }
+  ul.why { margin: 0; padding-left: 16px; min-width: 320px; } ul.why li { margin: 1px 0; }
+  .login { max-width: 380px; margin: 60px auto; border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+  .login input { width: 100%; padding: 8px; margin: 8px 0 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
+  .err { color: var(--bad); }
+  code { background: var(--head); padding: 1px 5px; border-radius: 4px; }
+  svg.spark { vertical-align: middle; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Design &amp; Demand Intelligence — business dashboard</h1>
+  <span class="meta" id="meta"></span>
+  <span class="sp"></span>
+  <button class="btn" id="refresh" type="button">Refresh</button>
+  <button class="btn" id="logout" type="button">Change key</button>
+</header>
+<nav id="tabs" role="tablist"></nav>
+<main id="main"><p class="note">Loading…</p></main>
+
+<script>
+(function () {
+  const API = (window.STYLE_VOTE_CONFIG && window.STYLE_VOTE_CONFIG.API_URL || "").trim();
+  const main = document.getElementById("main");
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+  };
+  let data = null, current = "overview";
+
+  const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const num = v => v !== "" && v !== null && !isNaN(Number(v));
+  const pct = v => num(v) ? Math.round(Number(v) * 100) + "%" : "";
+  const eur = v => num(v) ? "€" + Number(v).toFixed(2) : "";
+  const int = v => num(v) ? Math.round(Number(v)).toLocaleString() : "";
+  const dec = (d) => v => num(v) ? Number(v).toFixed(d) : esc(v);
+
+  function spark(csv) {
+    const v = String(csv || "").split(",").map(Number).filter(x => !isNaN(x));
+    if (!v.length) return "";
+    const max = Math.max(...v, 1), w = 90, h = 22;
+    const pts = v.map((x, i) => `${(i / (v.length - 1 || 1)) * w},${h - (x / max) * (h - 2) - 1}`).join(" ");
+    return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="${pts}"/></svg>`;
+  }
+
+  // Generic sortable, filterable table with CSV export.
+  function table(rows, cols, opts = {}) {
+    const wrap = document.createElement("div");
+    let sortKey = opts.sort || null, dir = opts.dir || 1, filter = "";
+    const bar = document.createElement("div");
+    bar.className = "tablebar";
+    bar.innerHTML = `<input type="search" placeholder="Filter rows…"> <button class="btn" type="button">Download CSV</button> <span class="meta">${rows.length} rows</span>`;
+    const box = document.createElement("div");
+    box.className = "scroll";
+    wrap.append(bar, box);
+    bar.querySelector("input").addEventListener("input", e => { filter = e.target.value.toLowerCase(); draw(); });
+    bar.querySelector("button").addEventListener("click", () => {
+      const lines = [cols.map(c => c.label)].concat(rows.map(r => cols.map(c => r[c.key] ?? "")));
+      const csv = lines.map(l => l.map(x => `"${String(x).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+      a.download = (opts.name || "table") + ".csv"; a.click();
+    });
+    function draw() {
+      let r = rows.filter(x => !filter || cols.some(c => String(x[c.key] ?? "").toLowerCase().includes(filter)));
+      if (sortKey) r = r.slice().sort((a, b) => {
+        const x = a[sortKey], y = b[sortKey];
+        return (num(x) && num(y) ? Number(x) - Number(y) : String(x ?? "").localeCompare(String(y ?? ""))) * dir;
+      });
+      box.innerHTML = `<table><thead><tr>${cols.map(c => `<th class="${c.num ? "num" : ""}" data-k="${c.key}">${esc(c.label)}${sortKey === c.key ? (dir > 0 ? " ▲" : " ▼") : ""}</th>`).join("")}</tr></thead>
+        <tbody>${r.map(x => `<tr>${cols.map(c => `<td class="${c.num ? "num" : ""}${c.wide ? " wide" : ""}">${c.fmt ? c.fmt(x[c.key], x) : esc(x[c.key])}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      box.querySelectorAll("th").forEach(th => th.addEventListener("click", () => {
+        const k = th.dataset.k; dir = sortKey === k ? -dir : 1; sortKey = k; draw();
+      }));
+    }
+    draw();
+    return wrap;
+  }
+
+  function section(note, ...nodes) {
+    main.innerHTML = "";
+    if (note) { const p = document.createElement("p"); p.className = "note"; p.innerHTML = note; main.append(p); }
+    nodes.forEach(n => main.append(n));
+  }
+
+  const designName = id => (data.designs.find(d => d.design_id === id) || {}).name
+                        || (data.trend_polls.find(t => t.trend_id === id) || {}).question || id;
+
+  const TABS = {
+    overview: ["Overview", () => {
+      const info = Object.fromEntries((data.run_info || []).map(r => [r.key, r.value]));
+      const live = data.live_votes || [];
+      const k = document.createElement("div");
+      k.className = "kpis";
+      const kpi = (v, l) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`;
+      k.innerHTML = kpi(data.briefs.length, "design briefs") +
+        kpi(int(data.buy_plan.reduce((s, r) => s + (Number(r.order_units) || 0), 0)), "units in first order") +
+        kpi(esc(info.launch_week || ""), "launch week") +
+        kpi(data.trends.filter(t => t.status === "rising").length + " / " + data.trends.length, "trends rising") +
+        kpi(int(live.reduce((s, r) => s + (Number(r.n_votes) || 0), 0)), "customer votes (live)") +
+        kpi(data.buy_plan.filter(r => r.stock_risk === "high").length, "briefs at high stock risk");
+      section("Results from the latest Colab run. Rerun the notebook to refresh trends and fold new votes into the scores; vote counts on the <b>Customer votes</b> tab are live.",
+        k, table(data.run_info || [], [{ key: "key", label: "Item" }, { key: "value", label: "Value" }], { name: "run_info" }));
+    }],
+    briefs: ["Design briefs", () => section(
+      "What to design and why. Each brief is a simple base with one signature detail. Scores are 0–100 (percentile among candidates of the same garment).",
+      table(data.briefs, [
+        { key: "rank", label: "#", num: true }, { key: "garment", label: "Garment" }, { key: "name", label: "Design", wide: true },
+        { key: "colour", label: "Colour", fmt: (v, r) => `<span class="sw" style="background:${esc(r.colour_hex)}"></span>${esc(v)}${r.pantone ? ` <span class="meta">PANTONE ${esc(r.pantone)}</span>` : ""}` },
+        { key: "material", label: "Material" }, { key: "multiway", label: "Convertible", wide: true, fmt: (v, r) => v ? `<b>${esc(v)}</b><br><span class="meta">${esc(r.conversion)}</span>` : "" },
+        { key: "sustainable", label: "Sustainable" }, { key: "price_eur", label: "Price", num: true, fmt: eur },
+        { key: "total_score", label: "Score", num: true, fmt: dec(1) }, { key: "trend_score", label: "Trend", num: true, fmt: dec(0) },
+        { key: "hit_probability", label: "Hit prob.", num: true, fmt: pct }, { key: "demand_score", label: "Demand", num: true, fmt: dec(0) },
+        { key: "history_score", label: "History", num: true, fmt: dec(0) }, { key: "vote_score", label: "Votes", num: true, fmt: dec(0) },
+        { key: "why", label: "Why", fmt: v => `<ul class="why">${String(v || "").split(" | ").filter(Boolean).map(x => `<li>${esc(x)}</li>`).join("")}</ul>` },
+      ], { name: "briefs" }))],
+    buy: ["Buy plan", () => section(
+      "How many to make. Order = the newsvendor quantity on 5,000 simulated seasons; p10–p90 is the 80% demand range. Units are on the H&amp;M Kaggle customer-panel scale unless a multiplier was set in the notebook.",
+      table(data.buy_plan, [
+        { key: "name", label: "Design", wide: true }, { key: "launch_week", label: "Launch w/c" },
+        { key: "order_units", label: "Order", num: true, fmt: int }, { key: "p10", label: "p10", num: true, fmt: int },
+        { key: "p50", label: "p50", num: true, fmt: int }, { key: "p90", label: "p90", num: true, fmt: int },
+        { key: "weekly_forecast", label: "12-week forecast", fmt: spark },
+        { key: "stock_risk", label: "Risk", fmt: v => `<span class="risk-${esc(v)}">${esc(v)}</span>` },
+        { key: "critical_ratio", label: "Critical ratio", num: true, fmt: dec(2) }, { key: "stockout_prob", label: "Stock-out prob.", num: true, fmt: pct },
+        { key: "expected_sell_through", label: "Sell-through", num: true, fmt: pct }, { key: "expected_leftover", label: "Leftover", num: true, fmt: int },
+        { key: "expected_profit_eur", label: "Exp. profit", num: true, fmt: v => num(v) ? "€" + int(v) : "" },
+        { key: "markdown_basis", label: "Markdown basis" }, { key: "age_mix", label: "Who buys similar pieces" },
+      ], { name: "buy_plan" }))],
+    votes: ["Customer votes", () => {
+      const rows = (data.live_votes || []).map(r => Object.assign({ name: designName(r.item_id) }, r));
+      section("Live from the voting page (one vote per shopper per item, their latest). <b>Approval</b> = share rating 4–5 of 5; <b>would buy</b> = said yes at the listed price.",
+        table(rows, [
+          { key: "type", label: "Type" }, { key: "name", label: "Design / trend" }, { key: "n_votes", label: "Votes", num: true, fmt: int },
+          { key: "avg_rating", label: "Avg rating", num: true, fmt: dec(2) }, { key: "approval", label: "Approval", num: true, fmt: pct },
+          { key: "would_buy", label: "Would buy", num: true, fmt: pct }, { key: "top_colour", label: "Top colour" },
+          { key: "hot_share", label: "Hot", num: true, fmt: pct }, { key: "last_vote", label: "Last vote" },
+        ], { name: "live_votes", sort: "n_votes", dir: -1 }));
+    }],
+    trends: ["Trends", () => section(
+      "Google Trends, monthly and worldwide. Momentum is year-on-year (last 3 months vs the same months a year earlier); <b>at launch</b> is the projected interest in the launch window relative to the keyword's own average (1.00 = normal).",
+      table(data.trends, [
+        { key: "keyword", label: "Keyword" }, { key: "garment", label: "Garment" }, { key: "attribute", label: "Design attribute" },
+        { key: "status", label: "Status", fmt: v => `<span class="st-${esc(v)}">${esc(v)}</span>` },
+        { key: "yoy_change_pct", label: "YoY", num: true, fmt: v => num(v) ? (v > 0 ? "+" : "") + Number(v).toFixed(0) + "%" : "" },
+        { key: "now", label: "Now", num: true, fmt: dec(2) }, { key: "at_launch", label: "At launch", num: true, fmt: dec(2) },
+        { key: "lifecycle", label: "Lifecycle cluster" }, { key: "hot_share", label: "Customers: hot", num: true, fmt: pct },
+      ], { name: "trends", sort: "yoy_change_pct", dir: -1 }))],
+    colours: ["Colours", () => section(
+      "Pantone colour trend palettes mapped to H&amp;M colour groups, with how that colour group sold in H&amp;M's history (sell index, 1.00 = average). Swatches are approximate.",
+      table(data.colours, [
+        { key: "pantone_name", label: "Pantone colour", fmt: (v, r) => `<span class="sw" style="background:${esc(r.hex)}"></span>${esc(v)}` },
+        { key: "tcx", label: "TCX" }, { key: "palette", label: "Palette" }, { key: "hm_colour", label: "H&M colour group" },
+        { key: "hm_sell_index", label: "Sell index", num: true, fmt: dec(2) }, { key: "hm_launches", label: "Launches", num: true, fmt: int },
+      ], { name: "colours" }))],
+    models: ["Models", () => section(
+      "How well the machine-learning models did on launches they never saw (the most recent 20%). Regression: lower WAPE/MAE is better. Classifier: higher AUC is better.",
+      table(data.model_report, Object.keys(data.model_report[0] || {}).map(k => ({ key: k, label: k, num: k !== "model" && k !== "task", fmt: v => num(v) ? Number(v).toFixed(3) : esc(v) })), { name: "model_report" }))],
+    links: ["Instagram links", () => {
+      const base = new URL("vote.html", location.href);
+      const rows = data.designs.filter(d => String(d.active).toUpperCase() === "TRUE").map(d => {
+        const u = new URL(base); u.searchParams.set("d", d.design_id); return Object.assign({ link: u.toString() }, d);
+      });
+      const all = base.toString();
+      const t = table(rows, [
+        { key: "name", label: "Design" }, { key: "design_id", label: "ID" },
+        { key: "image_url", label: "Image", fmt: v => v ? `<a href="${esc(v)}" target="_blank" rel="noopener">set</a>` : '<span class="meta">none yet</span>' },
+        { key: "link", label: "Vote link (put in story / bio / caption)", fmt: v => `<code>${esc(v)}</code> <button class="btn copy" data-v="${esc(v)}" type="button">Copy</button>` },
+      ], { name: "vote_links" });
+      section(`Post a design on Instagram and share its vote link: the page opens on that design, then lets people rate the rest and the trend polls. General link for the bio: <code>${esc(all)}</code> <button class="btn copy" data-v="${esc(all)}" type="button">Copy</button><br>To show the real post image instead of the drawn silhouette, paste an image URL into the <code>image_url</code> column of the <code>designs</code> tab in the Sheet.`, t);
+      main.querySelectorAll(".copy").forEach(b => b.addEventListener("click", () => {
+        navigator.clipboard?.writeText(b.dataset.v).then(() => { b.textContent = "Copied"; setTimeout(() => b.textContent = "Copy", 1200); });
+      }));
+    }],
+  };
+
+  function tabs() {
+    const nav = document.getElementById("tabs");
+    nav.innerHTML = "";
+    Object.entries(TABS).forEach(([id, [label, fn]]) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.role = "tab"; b.textContent = label; b.setAttribute("aria-selected", String(id === current));
+      b.addEventListener("click", () => { current = id; tabs(); fn(); });
+      nav.append(b);
+    });
+    TABS[current][1]();
+  }
+
+  function login(msg) {
+    document.getElementById("tabs").innerHTML = "";
+    main.innerHTML = `<form class="login"><b>Business access</b><p class="note">Enter the access key from the Apps Script setup (shown in its log).</p>
+      <input type="password" autocomplete="current-password" placeholder="Access key" required><button class="btn" type="submit">Open dashboard</button>
+      <p class="err">${esc(msg || "")}</p></form>`;
+    main.querySelector("form").addEventListener("submit", e => {
+      e.preventDefault(); store.set("bd_key", main.querySelector("input").value.trim()); load();
+    });
+  }
+
+  async function load() {
+    if (!API) { section("Add your Apps Script web app URL to <code>config.js</code> to connect this dashboard to the Google Sheet."); return; }
+    const key = store.get("bd_key");
+    if (!key) return login();
+    main.innerHTML = '<p class="note">Loading…</p>';
+    try {
+      const res = await fetch(API + (API.includes("?") ? "&" : "?") + "action=business&key=" + encodeURIComponent(key));
+      const d = await res.json();
+      if (d.error) { store.del("bd_key"); return login(d.error); }
+      ["briefs", "buy_plan", "trends", "colours", "model_report", "designs", "trend_polls", "run_info", "live_votes"].forEach(k => d[k] = d[k] || []);
+      data = d;
+      const info = Object.fromEntries(d.run_info.map(r => [r.key, r.value]));
+      document.getElementById("meta").textContent = info.updated_at ? `Last notebook run: ${info.updated_at}` : "No notebook run yet";
+      tabs();
+    } catch (e) {
+      section(`<span class="err">Couldn't reach the Apps Script (${esc(e.message)}). Check the URL in config.js and that the web app is deployed with access "Anyone".</span>`);
+    }
+  }
+
+  document.getElementById("refresh").addEventListener("click", load);
+  document.getElementById("logout").addEventListener("click", () => { store.del("bd_key"); login(); });
+  load();
+})();
+</script>
+</body>
+</html>
